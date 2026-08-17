@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -376,7 +377,6 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                           ? Stack(
                               alignment: Alignment.topCenter,
                               children: [
-                                // Merkez: Başlık ve Sosyal İkonlar
                                 Container(
                                   width: double.infinity,
                                   padding: const EdgeInsets.symmetric(horizontal: 55),
@@ -409,7 +409,6 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                                     ],
                                   ),
                                 ),
-                                // Sol Buton: Dil Seçimi 
                                 Positioned(
                                   left: 0,
                                   top: 7, 
@@ -422,7 +421,6 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                                     ),
                                   ),
                                 ),
-                                // Sağ Buton: Tema Seçimi 
                                 Positioned(
                                   right: 0,
                                   top: 7, 
@@ -438,7 +436,6 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                                 ),
                               ],
                             )
-                          // MASAÜSTÜ: Orijinal Düzen
                           : Stack(
                               alignment: Alignment.topCenter,
                               children: [
@@ -514,7 +511,10 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                               children: [
                                 PageView.builder(
                                   controller: _pageController,
-                                  onPageChanged: (index) => _progressController.forward(from: 0.0),
+                                  onPageChanged: (index) {
+                                    HapticFeedback.selectionClick(); 
+                                    _progressController.forward(from: 0.0);
+                                  },
                                   itemBuilder: (context, index) {
                                     final projectIndex = index % _projects.length;
                                     final project = _projects[projectIndex];
@@ -549,7 +549,6 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                                   },
                                 ),
 
-                                // KEDİNİN KUSURSUZ KONUMU
                                 Positioned(
                                   top: isMobileView ? -75 : -95,
                                   child: IgnorePointer( 
@@ -603,7 +602,6 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                                   ),
                                 ),
 
-                                // YÖN OKLARI (Hem Masaüstü Hem Mobil İçin)
                                 Positioned(
                                   left: isMobileView ? 8 : 60, 
                                   child: NavigationArrowButton(
@@ -674,7 +672,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
 }
 
 // -----------------------------------------------------------------------------
-// SÜRÜKLENEBİLİR DETAY VE QR MODALI
+// SÜRÜKLENEBİLİR DETAY VE QR MODALI (Swipe-to-Dismiss)
 // -----------------------------------------------------------------------------
 class DraggableProjectModal extends StatefulWidget {
   final Map<String, dynamic> project;
@@ -686,7 +684,7 @@ class DraggableProjectModal extends StatefulWidget {
 }
 
 class _DraggableProjectModalState extends State<DraggableProjectModal> {
-  Offset position = Offset.zero;
+  double _dragYOffset = 0.0; 
   bool showQR = false; 
 
   @override
@@ -696,8 +694,10 @@ class _DraggableProjectModalState extends State<DraggableProjectModal> {
     final primaryColor = isDark ? Colors.white : Colors.black;
     final secondaryColor = isDark ? const Color(0xFF888888) : const Color(0xFF666666);
     
-    return Transform.translate(
-      offset: position,
+    return AnimatedContainer(
+      duration: _dragYOffset == 0 ? const Duration(milliseconds: 250) : Duration.zero,
+      curve: Curves.easeOutCubic,
+      transform: Matrix4.translationValues(0, _dragYOffset, 0),
       child: Material(
         color: Colors.transparent,
         child: Container(
@@ -713,18 +713,47 @@ class _DraggableProjectModalState extends State<DraggableProjectModal> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               GestureDetector(
-                onPanUpdate: (details) => setState(() => position += details.delta),
+                onVerticalDragUpdate: (details) {
+                  setState(() {
+                    _dragYOffset += details.delta.dy;
+                    if (_dragYOffset < 0) _dragYOffset = 0; 
+                  });
+                },
+                onVerticalDragEnd: (details) {
+                  if (_dragYOffset > 120 || (details.primaryVelocity ?? 0) > 300) {
+                    Navigator.pop(context);
+                  } else {
+                    setState(() => _dragYOffset = 0.0); 
+                  }
+                },
                 child: Container(
-                  padding: const EdgeInsets.fromLTRB(40, 30, 30, 10),
                   color: Colors.transparent, 
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
                     children: [
-                      Text(
-                        (isTr ? widget.project['category_tr'] : widget.project['category_en']).toString().toUpperCase(),
-                        style: TextStyle(fontSize: 12, letterSpacing: 2, color: secondaryColor, fontWeight: FontWeight.bold),
+                      Center(
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 12),
+                          width: 40,
+                          height: 5,
+                          decoration: BoxDecoration(
+                            color: isDark ? Colors.white24 : Colors.black26, // HATALI RENK KODU DÜZELTİLDİ
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                       ),
-                      ModalCloseButton(onTap: () => Navigator.pop(context)),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(40, 20, 30, 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              (isTr ? widget.project['category_tr'] : widget.project['category_en']).toString().toUpperCase(),
+                              style: TextStyle(fontSize: 12, letterSpacing: 2, color: secondaryColor, fontWeight: FontWeight.bold),
+                            ),
+                            ModalCloseButton(onTap: () => Navigator.pop(context)),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -889,7 +918,10 @@ class _MagneticButtonState extends State<MagneticButton> {
         onPointerDown: (_) => setState(() => isPressed = true),
         onPointerUp: (_) => setState(() => isPressed = false),
         child: GestureDetector(
-          onTap: widget.onTap,
+          onTap: () {
+            HapticFeedback.lightImpact(); 
+            widget.onTap();
+          },
           child: AnimatedScale(
             scale: isPressed ? 0.90 : 1.0, 
             duration: const Duration(milliseconds: 100),
@@ -946,7 +978,10 @@ class _PremiumProjectCardState extends State<PremiumProjectCard> {
       onEnter: (_) => setState(() => isHovered = true),
       onExit: (_) => setState(() => isHovered = false),
       child: GestureDetector(
-        onTap: widget.isCenter ? widget.onTap : null,
+        onTap: widget.isCenter ? () {
+          HapticFeedback.mediumImpact(); 
+          widget.onTap();
+        } : null,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeOutCubic,
@@ -1062,7 +1097,10 @@ class _NavigationArrowButtonState extends State<NavigationArrowButton> {
         onPointerDown: (_) => setState(() => isPressed = true),
         onPointerUp: (_) => setState(() => isPressed = false),
         child: GestureDetector(
-          onTap: widget.onTap,
+          onTap: () {
+            HapticFeedback.lightImpact(); 
+            widget.onTap();
+          },
           child: AnimatedScale(
             scale: isPressed ? 0.90 : 1.0, 
             duration: const Duration(milliseconds: 100),
@@ -1115,7 +1153,10 @@ class _ModalCloseButtonState extends State<ModalCloseButton> {
         onPointerDown: (_) => setState(() => isPressed = true),
         onPointerUp: (_) => setState(() => isPressed = false),
         child: GestureDetector(
-          onTap: widget.onTap,
+          onTap: () {
+            HapticFeedback.lightImpact(); 
+            widget.onTap();
+          },
           child: AnimatedScale(
             scale: isPressed ? 0.85 : 1.0,
             duration: const Duration(milliseconds: 100),
