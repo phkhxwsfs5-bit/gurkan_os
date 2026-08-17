@@ -166,7 +166,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
     {
       'title': 'Vertical\nEscape',
       'category_en': 'Mobile Game',
-      'category_tr': 'Mobil Oyun',
+      'category_tr': 'MOBİL OYUN',
       'status_en': 'Live on Google Play',
       'status_tr': 'Google Play\'de Yayında',
       'url': 'https://play.google.com/store/apps/details?id=com.gurkanc.verticalescape&hl=tr',
@@ -181,7 +181,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
     {
       'title': 'Mood\nMixer',
       'category_en': 'Mobile App',
-      'category_tr': 'Mobil Uygulama',
+      'category_tr': 'MOBİL UYGULAMA',
       'status_en': 'Live on Google Play',
       'status_tr': 'Google Play\'de Yayında',
       'url': 'https://play.google.com/store/apps/details?id=com.gurkanc.moodmixer',
@@ -196,7 +196,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
     {
       'title': 'Shaman\nSurvivor',
       'category_en': 'Mobile Game',
-      'category_tr': 'Mobil Oyun',
+      'category_tr': 'MOBİL OYUN',
       'status_en': 'In Review',
       'status_tr': 'İncelemede',
       'url': '',
@@ -211,7 +211,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
     {
       'title': 'Gündem\nRadarı',
       'category_en': 'Automated Bot',
-      'category_tr': 'Otonom Bot',
+      'category_tr': 'OTONOM BOT',
       'status_en': 'Live on X',
       'status_tr': 'X\'te Yayında',
       'url': 'https://x.com/GundemRadariBot',
@@ -226,7 +226,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
     {
       'title': 'Dialed',
       'category_en': 'Mobile App',
-      'category_tr': 'Mobil Uygulama',
+      'category_tr': 'MOBİL UYGULAMA',
       'status_en': 'In Review',
       'status_tr': 'İncelemede',
       'url': '',
@@ -268,11 +268,11 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final isMob = MediaQuery.of(context).size.width < 700;
+    final isMob = MediaQuery.of(context).size.width < 900;
     if (_isMobile != isMob) {
       _isMobile = isMob;
       _pageController.dispose();
-      _pageController = PageController(viewportFraction: _isMobile ? 0.65 : 0.28, initialPage: _currentPageValue.round());
+      _pageController = PageController(viewportFraction: _isMobile ? 0.85 : 0.28, initialPage: _currentPageValue.round());
       _pageController.addListener(() {
         setState(() => _currentPageValue = _pageController.page ?? 1000.0);
       });
@@ -293,7 +293,9 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
     final now = DateTime.now();
     final dateStr = _formatDate(now);
     final timeStr = '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}';
-    setState(() => _currentDateTime = '$dateStr • $timeStr');
+    if (mounted) {
+      setState(() => _currentDateTime = '$dateStr • $timeStr');
+    }
   }
 
   @override
@@ -338,6 +340,8 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
 
   @override
   Widget build(BuildContext context) {
+    final isMobileView = MediaQuery.of(context).size.width < 900;
+    
     final activeIndex = (_currentPageValue.round()) % _projects.length;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final isTr = isTurkishNotifier.value;
@@ -346,209 +350,324 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
     final secondaryColor = isDark ? const Color(0xFF888888) : const Color(0xFF666666);
     final borderColor = isDark ? const Color(0xFF222222) : const Color(0xFFE2E2E2);
     final surfaceColor = Theme.of(context).colorScheme.surface;
+    
+    final screenHeight = MediaQuery.of(context).size.height;
+    final isShortScreen = screenHeight < 750;
 
     return Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(_isMobile ? 20.0 : 40.0, _isMobile ? 30.0 : 50.0, _isMobile ? 20.0 : 40.0, 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(width: 108), 
-                Column(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            physics: isShortScreen ? const BouncingScrollPhysics() : const NeverScrollableScrollPhysics(),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight, 
+              ),
+              child: IntrinsicHeight( 
+                child: Column(
                   children: [
-                    Text(
-                      'Gürkan Cihaner.',
-                      style: TextStyle(fontSize: _isMobile ? 36 : 52, fontWeight: FontWeight.w400, letterSpacing: -1.5, color: primaryColor),
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        MagneticButton(
-                          onTap: () => launchUrl(Uri.parse('https://x.com/grcihanercs')),
-                          builder: (isHovered, color) => FaIcon(FontAwesomeIcons.xTwitter, size: 20, color: color),
-                        ),
-                        const SizedBox(width: 16),
-                        MagneticButton(
-                          onTap: () => launchUrl(Uri.parse('https://www.instagram.com/grcihaner/')),
-                          builder: (isHovered, color) => FaIcon(FontAwesomeIcons.instagram, size: 20, color: color),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    // DİL DEĞİŞTİRME BUTONU (TR iken EN, EN iken TR gösterir)
-                    MagneticButton(
-                      onTap: () => isTurkishNotifier.value = !isTr,
-                      builder: (isHovered, color) => Text(
-                        isTr ? 'EN' : 'TR', 
-                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: color),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    // TEMA DEĞİŞTİRME BUTONU (Karanlıkken Güneş, Aydınlıkken Ay)
-                    MagneticButton(
-                      onTap: () => themeNotifier.value = isDark ? ThemeMode.light : ThemeMode.dark,
-                      builder: (isHovered, color) => Icon(
-                        isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined, 
-                        size: 20, 
-                        color: color,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: _isMobile ? 50 : 70), 
-                
-                SizedBox(
-                  height: _isMobile ? 360 : 420,
-                  width: double.infinity,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    clipBehavior: Clip.none, 
-                    children: [
-                      PageView.builder(
-                        controller: _pageController,
-                        onPageChanged: (index) => _progressController.forward(from: 0.0),
-                        itemBuilder: (context, index) {
-                          final projectIndex = index % _projects.length;
-                          final project = _projects[projectIndex];
-                          
-                          final cardDiff = index - _currentPageValue;
-                          final absDiff = cardDiff.abs();
-
-                          final scale = (1 - (absDiff * (_isMobile ? 0.10 : 0.15))).clamp(0.75, 1.0);
-                          final opacity = (1 - (absDiff * 0.35)).clamp(0.3, 1.0);
-
-                          return Center(
-                            child: Transform.scale(
-                              scale: scale,
-                              child: Opacity(
-                                opacity: opacity,
-                                child: SizedBox(
-                                  width: _isMobile ? 240 : 280, 
-                                  height: _isMobile ? 350 : 400, 
-                                  child: PremiumProjectCard( 
-                                    title: project['title']!,
-                                    category: isTr ? project['category_tr']! : project['category_en']!,
-                                    status: isTr ? project['status_tr']! : project['status_en']!,
-                                    isReview: project['isReview'],
-                                    isCenter: absDiff < 0.3,
-                                    isTr: isTr,
-                                    onTap: () => _showProjectDetails(project), 
+                    
+                    // ---------------------------------------------------------
+                    // DİNAMİK HEADER 
+                    // ---------------------------------------------------------
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(isMobileView ? 20.0 : 40.0, isMobileView ? 30.0 : 50.0, isMobileView ? 20.0 : 40.0, 10.0),
+                      child: isMobileView
+                          ? Stack(
+                              alignment: Alignment.topCenter,
+                              children: [
+                                // Merkez: Başlık ve Sosyal İkonlar
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.symmetric(horizontal: 55),
+                                  child: Column(
+                                    children: [
+                                      FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Text(
+                                          'Gürkan Cihaner',
+                                          style: TextStyle(fontSize: 36, fontWeight: FontWeight.w400, letterSpacing: -1.5, color: primaryColor),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 16),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          MagneticButton(
+                                            size: 42,
+                                            onTap: () => launchUrl(Uri.parse('https://x.com/grcihanercs')),
+                                            builder: (isHovered, color) => FaIcon(FontAwesomeIcons.xTwitter, size: 18, color: color),
+                                          ),
+                                          const SizedBox(width: 16),
+                                          MagneticButton(
+                                            size: 42,
+                                            onTap: () => launchUrl(Uri.parse('https://www.instagram.com/grcihaner/')),
+                                            builder: (isHovered, color) => FaIcon(FontAwesomeIcons.instagram, size: 18, color: color),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
+                                // Sol Buton: Dil Seçimi 
+                                Positioned(
+                                  left: 0,
+                                  top: 7, 
+                                  child: MagneticButton(
+                                    size: 38,
+                                    onTap: () => isTurkishNotifier.value = !isTr,
+                                    builder: (isHovered, color) => Text(
+                                      isTr ? 'EN' : 'TR', 
+                                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: color),
+                                    ),
+                                  ),
+                                ),
+                                // Sağ Buton: Tema Seçimi 
+                                Positioned(
+                                  right: 0,
+                                  top: 7, 
+                                  child: MagneticButton(
+                                    size: 38, 
+                                    onTap: () => themeNotifier.value = isDark ? ThemeMode.light : ThemeMode.dark,
+                                    builder: (isHovered, color) => Icon(
+                                      isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined, 
+                                      size: 16, 
+                                      color: color,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          // MASAÜSTÜ: Orijinal Düzen
+                          : Stack(
+                              alignment: Alignment.topCenter,
+                              children: [
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        'Gürkan Cihaner',
+                                        style: TextStyle(fontSize: 52, fontWeight: FontWeight.w400, letterSpacing: -1.5, color: primaryColor),
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          MagneticButton(
+                                            onTap: () => launchUrl(Uri.parse('https://x.com/grcihanercs')),
+                                            builder: (isHovered, color) => FaIcon(FontAwesomeIcons.xTwitter, size: 20, color: color),
+                                          ),
+                                          const SizedBox(width: 16),
+                                          MagneticButton(
+                                            onTap: () => launchUrl(Uri.parse('https://www.instagram.com/grcihaner/')),
+                                            builder: (isHovered, color) => FaIcon(FontAwesomeIcons.instagram, size: 20, color: color),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 0,
+                                  top: 0,
+                                  child: Row(
+                                    children: [
+                                      MagneticButton(
+                                        onTap: () => isTurkishNotifier.value = !isTr,
+                                        builder: (isHovered, color) => Text(
+                                          isTr ? 'EN' : 'TR', 
+                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: color),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      MagneticButton(
+                                        onTap: () => themeNotifier.value = isDark ? ThemeMode.light : ThemeMode.dark,
+                                        builder: (isHovered, color) => Icon(
+                                          isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined, 
+                                          size: 20, 
+                                          color: color,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                          );
-                        },
-                      ),
+                    ),
 
-                      // KEDİ KONUMU 
-                      Positioned(
-                        top: _isMobile ? -80 : -110, 
-                        child: IgnorePointer( 
-                          child: AnimatedBuilder(
-                            animation: _progressController,
-                            builder: (context, child) {
-                              double t = _progressController.value;
-                              String image = 'assets/tity.png';
-                              double dx = 0.0;
-                              double dy = 0.0;
-                              double rotate = 0.0;
+                    // ---------------------------------------------------------
+                    // CAROUSEL VE KEDİ BÖLÜMÜ
+                    // ---------------------------------------------------------
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(height: isMobileView ? 50 : 70), 
+                          
+                          SizedBox(
+                            height: isMobileView ? 400 : 450, 
+                            width: double.infinity,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              clipBehavior: Clip.none, 
+                              children: [
+                                PageView.builder(
+                                  controller: _pageController,
+                                  onPageChanged: (index) => _progressController.forward(from: 0.0),
+                                  itemBuilder: (context, index) {
+                                    final projectIndex = index % _projects.length;
+                                    final project = _projects[projectIndex];
+                                    
+                                    final cardDiff = index - _currentPageValue;
+                                    final absDiff = cardDiff.abs();
 
-                              if (t < 0.85) {
-                                image = 'assets/tity.png';
-                              } else if (t < 0.90) {
-                                double localT = ((t - 0.85) / 0.05).clamp(0.0, 1.0);
-                                image = 'assets/tity_push.png';
-                                dx = -12.0 * localT;
-                                dy = -4.0 * localT;
-                                rotate = -0.05 * localT;
-                              } else if (t < 0.97) {
-                                double localT = ((t - 0.90) / 0.07).clamp(0.0, 1.0);
-                                image = 'assets/tity_push.png';
-                                dx = -12.0 + (8.0 * localT);
-                                dy = -4.0 + (4.0 * localT);
-                                rotate = -0.05 + (0.02 * localT);
-                              } else {
-                                double localT = ((t - 0.97) / 0.03).clamp(0.0, 1.0);
-                                double curveT = Curves.easeInExpo.transform(localT);
-                                image = 'assets/tity_push.png';
-                                dx = -4.0 + (28.0 * curveT);
-                                dy = 0.0 + (12.0 * curveT);
-                                rotate = -0.03 + (0.12 * curveT);
-                              }
+                                    final scale = (1 - (absDiff * (isMobileView ? 0.10 : 0.15))).clamp(0.75, 1.0);
+                                    final opacity = (1 - (absDiff * 0.35)).clamp(0.3, 1.0);
 
-                              return Transform.translate(
-                                offset: Offset(dx, dy),
-                                child: Transform.rotate(
-                                  angle: rotate,
-                                  child: Image.asset(
-                                    image, 
-                                    height: _isMobile ? 120 : 160, 
-                                    alignment: Alignment.bottomCenter, 
-                                    fit: BoxFit.fitHeight,
-                                    gaplessPlayback: true,
+                                    return Center(
+                                      child: Transform.scale(
+                                        scale: scale,
+                                        child: Opacity(
+                                          opacity: opacity,
+                                          child: SizedBox(
+                                            width: isMobileView ? 260 : 280, 
+                                            height: isMobileView ? 370 : 400, 
+                                            child: PremiumProjectCard( 
+                                              title: project['title']!,
+                                              category: isTr ? project['category_tr']! : project['category_en']!,
+                                              status: isTr ? project['status_tr']! : project['status_en']!,
+                                              isReview: project['isReview'],
+                                              isCenter: absDiff < 0.3,
+                                              isTr: isTr,
+                                              onTap: () => _showProjectDetails(project), 
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+
+                                // KEDİNİN KUSURSUZ KONUMU
+                                Positioned(
+                                  top: isMobileView ? -75 : -95,
+                                  child: IgnorePointer( 
+                                    child: AnimatedBuilder(
+                                      animation: _progressController,
+                                      builder: (context, child) {
+                                        double t = _progressController.value;
+                                        String image = 'assets/tity.png';
+                                        double dx = 0.0;
+                                        double dy = 0.0;
+                                        double rotate = 0.0;
+
+                                        if (t < 0.85) {
+                                          image = 'assets/tity.png';
+                                        } else if (t < 0.90) {
+                                          double localT = ((t - 0.85) / 0.05).clamp(0.0, 1.0);
+                                          image = 'assets/tity_push.png';
+                                          dx = -12.0 * localT;
+                                          dy = -4.0 * localT;
+                                          rotate = -0.05 * localT;
+                                        } else if (t < 0.97) {
+                                          double localT = ((t - 0.90) / 0.07).clamp(0.0, 1.0);
+                                          image = 'assets/tity_push.png';
+                                          dx = -12.0 + (8.0 * localT);
+                                          dy = -4.0 + (4.0 * localT);
+                                          rotate = -0.05 + (0.02 * localT);
+                                        } else {
+                                          double localT = ((t - 0.97) / 0.03).clamp(0.0, 1.0);
+                                          double curveT = Curves.easeInExpo.transform(localT);
+                                          image = 'assets/tity_push.png';
+                                          dx = -4.0 + (28.0 * curveT);
+                                          dy = 0.0 + (12.0 * curveT);
+                                          rotate = -0.03 + (0.12 * curveT);
+                                        }
+
+                                        return Transform.translate(
+                                          offset: Offset(dx, dy),
+                                          child: Transform.rotate(
+                                            angle: rotate,
+                                            child: Image.asset(
+                                              image, 
+                                              height: isMobileView ? 120 : 160, 
+                                              alignment: Alignment.bottomCenter, 
+                                              fit: BoxFit.fitHeight,
+                                              gaplessPlayback: true,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ),
-                              );
-                            },
+
+                                // YÖN OKLARI (Hem Masaüstü Hem Mobil İçin)
+                                Positioned(
+                                  left: isMobileView ? 8 : 60, 
+                                  child: NavigationArrowButton(
+                                    icon: Icons.chevron_left, 
+                                    size: isMobileView ? 38 : 48,
+                                    iconSize: isMobileView ? 20 : 24,
+                                    onTap: _goToPreviousPage
+                                  )
+                                ),
+                                Positioned(
+                                  right: isMobileView ? 8 : 60, 
+                                  child: NavigationArrowButton(
+                                    icon: Icons.chevron_right, 
+                                    size: isMobileView ? 38 : 48,
+                                    iconSize: isMobileView ? 20 : 24,
+                                    onTap: _goToNextPage
+                                  )
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
+
+                          SizedBox(height: isMobileView ? 30 : 40), 
+                          Text(
+                            '[ 0${activeIndex + 1} / 0${_projects.length} ]',
+                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, fontFamily: 'Courier', color: secondaryColor, letterSpacing: 4),
+                          ),
+                        ],
                       ),
+                    ),
 
-                      Positioned(left: _isMobile ? 10 : 60, child: NavigationArrowButton(icon: Icons.chevron_left, onTap: _goToPreviousPage)),
-                      Positioned(right: _isMobile ? 10 : 60, child: NavigationArrowButton(icon: Icons.chevron_right, onTap: _goToNextPage)),
-                    ],
-                  ),
+                    // ---------------------------------------------------------
+                    // ALT BİLGİ ALANI
+                    // ---------------------------------------------------------
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(isMobileView ? 20.0 : 40.0, 10.0, isMobileView ? 20.0 : 40.0, isMobileView ? 20.0 : 40.0),
+                      child: Container(
+                        padding: EdgeInsets.all(isMobileView ? 16 : 24),
+                        decoration: BoxDecoration(border: Border.all(color: borderColor), color: surfaceColor),
+                        child: isMobileView 
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(isTr ? 'DURUM: ÇEVRİMİÇİ\nKONUM: ANKARA, TR' : 'STATUS: ONLINE\nLOCATION: ANKARA, TR', textAlign: TextAlign.center, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 2, color: secondaryColor, height: 1.6)),
+                                const SizedBox(height: 16),
+                                Text(_currentDateTime, textAlign: TextAlign.center, style: TextStyle(fontFamily: 'Courier', fontSize: 14, color: primaryColor, fontWeight: FontWeight.bold, letterSpacing: 1.0)),
+                              ],
+                            )
+                          : Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(child: Text(isTr ? 'DURUM: ÇEVRİMİÇİ\nKONUM: ANKARA, TR' : 'STATUS: ONLINE\nLOCATION: ANKARA, TR', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 2, color: secondaryColor, height: 1.6))),
+                                Text(_currentDateTime, textAlign: TextAlign.right, style: TextStyle(fontFamily: 'Courier', fontSize: 14, color: primaryColor, fontWeight: FontWeight.bold, letterSpacing: 1.5)),
+                              ],
+                            ),
+                      ),
+                    ),
+                    
+                  ],
                 ),
-
-                SizedBox(height: _isMobile ? 30 : 40), 
-                Text(
-                  '[ 0${activeIndex + 1} / 0${_projects.length} ]',
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, fontFamily: 'Courier', color: secondaryColor, letterSpacing: 4),
-                ),
-              ],
+              ),
             ),
-          ),
-
-          Padding(
-            padding: EdgeInsets.fromLTRB(_isMobile ? 20.0 : 40.0, 10.0, _isMobile ? 20.0 : 40.0, _isMobile ? 20.0 : 40.0),
-            child: Container(
-              padding: EdgeInsets.all(_isMobile ? 16 : 24),
-              decoration: BoxDecoration(border: Border.all(color: borderColor), color: surfaceColor),
-              child: _isMobile 
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(isTr ? 'DURUM: ÇEVRİMİÇİ\nKONUM: ANKARA, TR' : 'STATUS: ONLINE\nLOCATION: ANKARA, TR', textAlign: TextAlign.center, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 2, color: secondaryColor, height: 1.6)),
-                      const SizedBox(height: 16),
-                      Text(_currentDateTime, textAlign: TextAlign.center, style: TextStyle(fontFamily: 'Courier', fontSize: 14, color: primaryColor, fontWeight: FontWeight.bold, letterSpacing: 1.0)),
-                    ],
-                  )
-                : Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(child: Text(isTr ? 'DURUM: ÇEVRİMİÇİ\nKONUM: ANKARA, TR' : 'STATUS: ONLINE\nLOCATION: ANKARA, TR', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 2, color: secondaryColor, height: 1.6))),
-                      Text(_currentDateTime, textAlign: TextAlign.right, style: TextStyle(fontFamily: 'Courier', fontSize: 14, color: primaryColor, fontWeight: FontWeight.bold, letterSpacing: 1.5)),
-                    ],
-                  ),
-            ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -726,13 +845,14 @@ class _DraggableProjectModalState extends State<DraggableProjectModal> {
 }
 
 // -----------------------------------------------------------------------------
-// GELİŞMİŞ BUTON WIDGETI (Manyetik & Fiziksel Basma Hissiyatlı)
+// GELİŞMİŞ BUTON WIDGETI
 // -----------------------------------------------------------------------------
 class MagneticButton extends StatefulWidget {
   final Widget Function(bool isHovered, Color color) builder;
   final VoidCallback onTap;
+  final double size; 
 
-  const MagneticButton({super.key, required this.builder, required this.onTap});
+  const MagneticButton({super.key, required this.builder, required this.onTap, this.size = 48});
 
   @override
   State<MagneticButton> createState() => _MagneticButtonState();
@@ -777,8 +897,8 @@ class _MagneticButtonState extends State<MagneticButton> {
               duration: isHovered ? const Duration(milliseconds: 50) : const Duration(milliseconds: 300),
               curve: Curves.easeOut,
               transform: Matrix4.translationValues(offsetX, offsetY, 0),
-              width: 48, 
-              height: 48,
+              width: widget.size, 
+              height: widget.size,
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: isHovered ? defaultColor : Colors.transparent,
@@ -909,10 +1029,16 @@ class _PremiumProjectCardState extends State<PremiumProjectCard> {
   }
 }
 
+// -----------------------------------------------------------------------------
+// YÖN OKLARI WIDGETI 
+// -----------------------------------------------------------------------------
 class NavigationArrowButton extends StatefulWidget {
   final IconData icon;
   final VoidCallback onTap;
-  const NavigationArrowButton({super.key, required this.icon, required this.onTap});
+  final double size; 
+  final double iconSize; 
+
+  const NavigationArrowButton({super.key, required this.icon, required this.onTap, this.size = 48, this.iconSize = 24});
 
   @override
   State<NavigationArrowButton> createState() => _NavigationArrowButtonState();
@@ -942,7 +1068,9 @@ class _NavigationArrowButtonState extends State<NavigationArrowButton> {
             duration: const Duration(milliseconds: 100),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 150),
-              padding: const EdgeInsets.all(12),
+              width: widget.size,
+              height: widget.size,
+              alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: isHovered ? (isDark ? Colors.white : Colors.black) : Theme.of(context).colorScheme.surface.withOpacity(0.8),
                 border: Border.all(color: isHovered ? Colors.transparent : (isDark ? const Color(0xFF333333) : const Color(0xFFDDDDDD))),
@@ -950,7 +1078,7 @@ class _NavigationArrowButtonState extends State<NavigationArrowButton> {
               ),
               child: Icon(
                 widget.icon,
-                size: 24,
+                size: widget.iconSize,
                 color: isHovered ? (isDark ? Colors.black : Colors.white) : (isDark ? Colors.white : Colors.black),
               ),
             ),
