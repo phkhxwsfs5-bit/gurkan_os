@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -66,10 +65,6 @@ class GurkanPremiumPortfolio extends StatelessWidget {
     );
   }
 }
-
-// -----------------------------------------------------------------------------
-// 1. YÜKLEME EKRANI
-// -----------------------------------------------------------------------------
 class IndieDevBootScreen extends StatefulWidget {
   const IndieDevBootScreen({super.key});
 
@@ -143,10 +138,6 @@ class _IndieDevBootScreenState extends State<IndieDevBootScreen> {
     );
   }
 }
-
-// -----------------------------------------------------------------------------
-// ANA EKRAN (HUB)
-// -----------------------------------------------------------------------------
 class CarouselPortfolioScreen extends StatefulWidget {
   const CarouselPortfolioScreen({super.key});
 
@@ -325,7 +316,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
     _progressController.stop(); 
     showGeneralDialog(
       context: context,
-      barrierDismissible: true, // Dışarı tıklanınca kapanma özelliği korundu
+      barrierDismissible: true, 
       barrierLabel: 'Dismiss',
       barrierColor: Colors.black.withOpacity(0.5), 
       transitionDuration: const Duration(milliseconds: 300),
@@ -367,10 +358,6 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
               child: IntrinsicHeight( 
                 child: Column(
                   children: [
-                    
-                    // ---------------------------------------------------------
-                    // DİNAMİK HEADER 
-                    // ---------------------------------------------------------
                     Padding(
                       padding: EdgeInsets.fromLTRB(isMobileView ? 20.0 : 40.0, isMobileView ? 30.0 : 50.0, isMobileView ? 20.0 : 40.0, 10.0),
                       child: isMobileView
@@ -411,7 +398,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                                 ),
                                 Positioned(
                                   left: 0,
-                                  top: 8, // Optik hizalama için 1 piksel aşağı alındı
+                                  top: 8, 
                                   child: MagneticButton(
                                     size: 38,
                                     onTap: () => isTurkishNotifier.value = !isTr,
@@ -423,7 +410,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                                 ),
                                 Positioned(
                                   right: 0,
-                                  top: 6, // Optik hizalama için 1 piksel yukarı alındı
+                                  top: 6, 
                                   child: MagneticButton(
                                     size: 38, 
                                     onTap: () => themeNotifier.value = isDark ? ThemeMode.light : ThemeMode.dark,
@@ -492,10 +479,6 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                               ],
                             ),
                     ),
-
-                    // ---------------------------------------------------------
-                    // CAROUSEL VE KEDİ BÖLÜMÜ
-                    // ---------------------------------------------------------
                     Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -512,7 +495,6 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                                 PageView.builder(
                                   controller: _pageController,
                                   onPageChanged: (index) {
-                                    HapticFeedback.selectionClick(); 
                                     _progressController.forward(from: 0.0);
                                   },
                                   itemBuilder: (context, index) {
@@ -632,10 +614,6 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                         ],
                       ),
                     ),
-
-                    // ---------------------------------------------------------
-                    // ALT BİLGİ ALANI
-                    // ---------------------------------------------------------
                     Padding(
                       padding: EdgeInsets.fromLTRB(isMobileView ? 20.0 : 40.0, 10.0, isMobileView ? 20.0 : 40.0, isMobileView ? 20.0 : 40.0),
                       child: Container(
@@ -671,9 +649,6 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
   }
 }
 
-// -----------------------------------------------------------------------------
-// SABİT DETAY VE QR MODALI
-// -----------------------------------------------------------------------------
 class ProjectDetailsModal extends StatefulWidget {
   final Map<String, dynamic> project;
   final bool isMobile;
@@ -834,9 +809,6 @@ class _ProjectDetailsModalState extends State<ProjectDetailsModal> {
   }
 }
 
-// -----------------------------------------------------------------------------
-// GELİŞMİŞ BUTON WIDGETI
-// -----------------------------------------------------------------------------
 class MagneticButton extends StatefulWidget {
   final Widget Function(bool isHovered, Color color) builder;
   final VoidCallback onTap;
@@ -880,7 +852,6 @@ class _MagneticButtonState extends State<MagneticButton> {
         onPointerUp: (_) => setState(() => isPressed = false),
         child: GestureDetector(
           onTap: () {
-            HapticFeedback.lightImpact(); 
             widget.onTap();
           },
           child: AnimatedScale(
@@ -907,9 +878,6 @@ class _MagneticButtonState extends State<MagneticButton> {
   }
 }
 
-// -----------------------------------------------------------------------------
-// DİĞER WIDGETLAR
-// -----------------------------------------------------------------------------
 class PremiumProjectCard extends StatefulWidget {
   final String title;
   final String category;
@@ -940,7 +908,6 @@ class _PremiumProjectCardState extends State<PremiumProjectCard> {
       onExit: (_) => setState(() => isHovered = false),
       child: GestureDetector(
         onTap: widget.isCenter ? () {
-          HapticFeedback.mediumImpact(); 
           widget.onTap();
         } : null,
         child: AnimatedContainer(
@@ -1025,9 +992,6 @@ class _PremiumProjectCardState extends State<PremiumProjectCard> {
   }
 }
 
-// -----------------------------------------------------------------------------
-// YÖN OKLARI WIDGETI 
-// -----------------------------------------------------------------------------
 class NavigationArrowButton extends StatefulWidget {
   final IconData icon;
   final VoidCallback onTap;
@@ -1059,7 +1023,6 @@ class _NavigationArrowButtonState extends State<NavigationArrowButton> {
         onPointerUp: (_) => setState(() => isPressed = false),
         child: GestureDetector(
           onTap: () {
-            HapticFeedback.lightImpact(); 
             widget.onTap();
           },
           child: AnimatedScale(
@@ -1115,7 +1078,6 @@ class _ModalCloseButtonState extends State<ModalCloseButton> {
         onPointerUp: (_) => setState(() => isPressed = false),
         child: GestureDetector(
           onTap: () {
-            HapticFeedback.lightImpact(); 
             widget.onTap();
           },
           child: AnimatedScale(
