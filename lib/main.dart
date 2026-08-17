@@ -325,13 +325,13 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
     _progressController.stop(); 
     showGeneralDialog(
       context: context,
-      barrierDismissible: true,
+      barrierDismissible: true, // Dışarı tıklanınca kapanma özelliği korundu
       barrierLabel: 'Dismiss',
       barrierColor: Colors.black.withOpacity(0.5), 
       transitionDuration: const Duration(milliseconds: 300),
       pageBuilder: (context, animation, secondaryAnimation) {
         return Center(
-          child: DraggableProjectModal(project: project, isMobile: _isMobile),
+          child: ProjectDetailsModal(project: project, isMobile: _isMobile),
         );
       },
     ).then((_) {
@@ -411,7 +411,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                                 ),
                                 Positioned(
                                   left: 0,
-                                  top: 7, 
+                                  top: 8, // Optik hizalama için 1 piksel aşağı alındı
                                   child: MagneticButton(
                                     size: 38,
                                     onTap: () => isTurkishNotifier.value = !isTr,
@@ -423,7 +423,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                                 ),
                                 Positioned(
                                   right: 0,
-                                  top: 7, 
+                                  top: 6, // Optik hizalama için 1 piksel yukarı alındı
                                   child: MagneticButton(
                                     size: 38, 
                                     onTap: () => themeNotifier.value = isDark ? ThemeMode.light : ThemeMode.dark,
@@ -672,19 +672,18 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
 }
 
 // -----------------------------------------------------------------------------
-// SÜRÜKLENEBİLİR DETAY VE QR MODALI (Swipe-to-Dismiss)
+// SABİT DETAY VE QR MODALI
 // -----------------------------------------------------------------------------
-class DraggableProjectModal extends StatefulWidget {
+class ProjectDetailsModal extends StatefulWidget {
   final Map<String, dynamic> project;
   final bool isMobile;
-  const DraggableProjectModal({super.key, required this.project, required this.isMobile});
+  const ProjectDetailsModal({super.key, required this.project, required this.isMobile});
 
   @override
-  State<DraggableProjectModal> createState() => _DraggableProjectModalState();
+  State<ProjectDetailsModal> createState() => _ProjectDetailsModalState();
 }
 
-class _DraggableProjectModalState extends State<DraggableProjectModal> {
-  double _dragYOffset = 0.0; 
+class _ProjectDetailsModalState extends State<ProjectDetailsModal> {
   bool showQR = false; 
 
   @override
@@ -694,179 +693,141 @@ class _DraggableProjectModalState extends State<DraggableProjectModal> {
     final primaryColor = isDark ? Colors.white : Colors.black;
     final secondaryColor = isDark ? const Color(0xFF888888) : const Color(0xFF666666);
     
-    return AnimatedContainer(
-      duration: _dragYOffset == 0 ? const Duration(milliseconds: 250) : Duration.zero,
-      curve: Curves.easeOutCubic,
-      transform: Matrix4.translationValues(0, _dragYOffset, 0),
-      child: Material(
-        color: Colors.transparent,
-        child: Container(
-          width: widget.isMobile ? MediaQuery.of(context).size.width * 0.9 : 500,
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            border: Border.all(color: isDark ? const Color(0xFF333333) : const Color(0xFFDDDDDD)),
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [BoxShadow(color: Colors.black.withOpacity(isDark ? 0.8 : 0.1), blurRadius: 40, offset: const Offset(0, 20))],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GestureDetector(
-                onVerticalDragUpdate: (details) {
-                  setState(() {
-                    _dragYOffset += details.delta.dy;
-                    if (_dragYOffset < 0) _dragYOffset = 0; 
-                  });
-                },
-                onVerticalDragEnd: (details) {
-                  if (_dragYOffset > 120 || (details.primaryVelocity ?? 0) > 300) {
-                    Navigator.pop(context);
-                  } else {
-                    setState(() => _dragYOffset = 0.0); 
-                  }
-                },
-                child: Container(
-                  color: Colors.transparent, 
-                  child: Column(
-                    children: [
-                      Center(
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 12),
-                          width: 40,
-                          height: 5,
-                          decoration: BoxDecoration(
-                            color: isDark ? Colors.white24 : Colors.black26, // HATALI RENK KODU DÜZELTİLDİ
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(40, 20, 30, 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              (isTr ? widget.project['category_tr'] : widget.project['category_en']).toString().toUpperCase(),
-                              style: TextStyle(fontSize: 12, letterSpacing: 2, color: secondaryColor, fontWeight: FontWeight.bold),
-                            ),
-                            ModalCloseButton(onTap: () => Navigator.pop(context)),
-                          ],
-                        ),
-                      ),
-                    ],
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        width: widget.isMobile ? MediaQuery.of(context).size.width * 0.9 : 500,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          border: Border.all(color: isDark ? const Color(0xFF333333) : const Color(0xFFDDDDDD)),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [BoxShadow(color: Colors.black.withOpacity(isDark ? 0.8 : 0.1), blurRadius: 40, offset: const Offset(0, 20))],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(40, 30, 30, 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    (isTr ? widget.project['category_tr'] : widget.project['category_en']).toString().toUpperCase(),
+                    style: TextStyle(fontSize: 12, letterSpacing: 2, color: secondaryColor, fontWeight: FontWeight.bold),
                   ),
-                ),
+                  ModalCloseButton(onTap: () => Navigator.pop(context)),
+                ],
               ),
-              
-              Padding(
-                padding: const EdgeInsets.fromLTRB(40, 0, 40, 40),
-                child: AnimatedCrossFade(
-                  duration: const Duration(milliseconds: 300),
-                  crossFadeState: showQR ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                  firstChild: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.project['title'].toString().replaceAll('\n', ' '), 
-                        style: TextStyle(fontSize: 32, color: primaryColor, fontWeight: FontWeight.w400),
-                      ),
-                      const SizedBox(height: 24),
-                      Text(
-                        isTr ? widget.project['desc_tr'] : widget.project['desc_en'],
-                        style: TextStyle(fontSize: 15, color: isDark ? const Color(0xFFAAAAAA) : const Color(0xFF444444), height: 1.5),
-                      ),
-                      const SizedBox(height: 40),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                if (widget.project['url'].toString().isNotEmpty) {
-                                  launchUrl(Uri.parse(widget.project['url']));
-                                }
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(vertical: 16),
-                                decoration: BoxDecoration(
-                                  color: widget.project['isReview'] 
-                                      ? (isDark ? const Color(0xFF222222) : const Color(0xFFEEEEEE)) 
-                                      : primaryColor,
+            ),
+            
+            Padding(
+              padding: const EdgeInsets.fromLTRB(40, 0, 40, 40),
+              child: AnimatedCrossFade(
+                duration: const Duration(milliseconds: 300),
+                crossFadeState: showQR ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                firstChild: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.project['title'].toString().replaceAll('\n', ' '), 
+                      style: TextStyle(fontSize: 32, color: primaryColor, fontWeight: FontWeight.w400),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      isTr ? widget.project['desc_tr'] : widget.project['desc_en'],
+                      style: TextStyle(fontSize: 15, color: isDark ? const Color(0xFFAAAAAA) : const Color(0xFF444444), height: 1.5),
+                    ),
+                    const SizedBox(height: 40),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              if (widget.project['url'].toString().isNotEmpty) {
+                                launchUrl(Uri.parse(widget.project['url']));
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              decoration: BoxDecoration(
+                                color: widget.project['isReview'] 
+                                    ? (isDark ? const Color(0xFF222222) : const Color(0xFFEEEEEE)) 
+                                    : primaryColor,
                                   borderRadius: BorderRadius.circular(8),
-                                ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  widget.project['isReview'] 
-                                      ? (isTr ? 'ONAY BEKLİYOR' : 'PENDING REVIEW') 
-                                      : (isTr ? widget.project['action_btn_tr'] : widget.project['action_btn_en']),
-                                  style: TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 1.5,
-                                    color: widget.project['isReview'] ? secondaryColor : Theme.of(context).colorScheme.surface,
-                                  ),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                widget.project['isReview'] 
+                                    ? (isTr ? 'ONAY BEKLİYOR' : 'PENDING REVIEW') 
+                                    : (isTr ? widget.project['action_btn_tr'] : widget.project['action_btn_en']),
+                                style: TextStyle(
+                                  fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 1.5,
+                                  color: widget.project['isReview'] ? secondaryColor : Theme.of(context).colorScheme.surface,
                                 ),
                               ),
                             ),
                           ),
-                          if (!widget.project['isReview'] && !widget.isMobile) ...[
-                            const SizedBox(width: 12),
-                            InkWell(
-                              onTap: () => setState(() => showQR = true),
-                              child: Container(
-                                padding: const EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: isDark ? const Color(0xFF444444) : const Color(0xFFCCCCCC)),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Icon(Icons.qr_code_scanner, color: primaryColor, size: 20),
+                        ),
+                        if (!widget.project['isReview'] && !widget.isMobile) ...[
+                          const SizedBox(width: 12),
+                          InkWell(
+                            onTap: () => setState(() => showQR = true),
+                            child: Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: isDark ? const Color(0xFF444444) : const Color(0xFFCCCCCC)),
+                                borderRadius: BorderRadius.circular(8),
                               ),
+                              child: Icon(Icons.qr_code_scanner, color: primaryColor, size: 20),
                             ),
-                          ]
-                        ],
-                      )
-                    ],
-                  ),
-                  secondChild: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 160,
-                        height: 160,
+                          ),
+                        ]
+                      ],
+                    )
+                  ],
+                ),
+                secondChild: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 160,
+                      height: 160,
+                      decoration: BoxDecoration(
+                        color: Colors.white, 
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: const Color(0xFFEEEEEE)),
+                      ),
+                      child: const Icon(Icons.qr_code_2, color: Colors.black, size: 140), 
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      isTr ? widget.project['qr_msg_tr'] : widget.project['qr_msg_en'],
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14, color: secondaryColor),
+                    ),
+                    const SizedBox(height: 32),
+                    InkWell(
+                      onTap: () => setState(() => showQR = false),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        width: double.infinity,
                         decoration: BoxDecoration(
-                          color: Colors.white, 
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFFEEEEEE)),
+                          border: Border.all(color: isDark ? const Color(0xFF444444) : const Color(0xFFCCCCCC)),
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Icon(Icons.qr_code_2, color: Colors.black, size: 140), 
-                      ),
-                      const SizedBox(height: 24),
-                      Text(
-                        isTr ? widget.project['qr_msg_tr'] : widget.project['qr_msg_en'],
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 14, color: secondaryColor),
-                      ),
-                      const SizedBox(height: 32),
-                      InkWell(
-                        onTap: () => setState(() => showQR = false),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: isDark ? const Color(0xFF444444) : const Color(0xFFCCCCCC)),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            isTr ? 'GERİ DÖN' : 'GO BACK',
-                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 1.5, color: primaryColor),
-                          ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          isTr ? 'GERİ DÖN' : 'GO BACK',
+                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 1.5, color: primaryColor),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
