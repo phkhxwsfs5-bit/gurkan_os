@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.dark);
-final ValueNotifier<bool> isTurkishNotifier = ValueNotifier(true); 
+final ValueNotifier<bool> isTurkishNotifier = ValueNotifier(true);
 
 void main() {
   runApp(const GurkanPremiumPortfolio());
@@ -57,7 +56,7 @@ class GurkanPremiumPortfolio extends StatelessWidget {
                   onSurface: Colors.white,
                 ),
               ),
-              home: const IndieDevBootScreen(), 
+              home: const IndieDevBootScreen(),
             );
           },
         );
@@ -76,7 +75,7 @@ class IndieDevBootScreen extends StatefulWidget {
 class _IndieDevBootScreenState extends State<IndieDevBootScreen> {
   bool _showBoot = true;
   int _currentStep = 0;
-  
+
   final List<String> _bootStepsEn = ['Loading assets...', 'Preparing environment...', 'Ready.'];
   final List<String> _bootStepsTr = ['Veriler yükleniyor...', 'Ortam hazırlanıyor...', 'Hazır.'];
 
@@ -101,7 +100,7 @@ class _IndieDevBootScreenState extends State<IndieDevBootScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final isTr = isTurkishNotifier.value;
     final steps = isTr ? _bootStepsTr : _bootStepsEn;
-    
+
     return Scaffold(
       body: Stack(
         children: [
@@ -110,7 +109,6 @@ class _IndieDevBootScreenState extends State<IndieDevBootScreen> {
             duration: const Duration(milliseconds: 800),
             child: const CarouselPortfolioScreen(),
           ),
-          
           if (_showBoot)
             Container(
               color: Theme.of(context).scaffoldBackgroundColor,
@@ -150,7 +148,7 @@ class CarouselPortfolioScreen extends StatefulWidget {
 class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with SingleTickerProviderStateMixin {
   late Timer _clockTimer;
   String _currentDateTime = '';
-  
+
   late PageController _pageController;
   bool _isMobile = false;
   double _currentPageValue = 1000.0;
@@ -315,12 +313,12 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
   }
 
   void _showProjectDetails(Map<String, dynamic> project) {
-    _progressController.stop(); 
+    _progressController.stop();
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
       barrierLabel: 'Dismiss',
-      barrierColor: Colors.black.withOpacity(0.5), 
+      barrierColor: Colors.black.withOpacity(0.5),
       transitionDuration: const Duration(milliseconds: 300),
       pageBuilder: (context, animation, secondaryAnimation) {
         return Center(
@@ -335,16 +333,13 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
   @override
   Widget build(BuildContext context) {
     final isMobileView = MediaQuery.of(context).size.width < 900;
-    
     final activeIndex = (_currentPageValue.round()) % _projects.length;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final isTr = isTurkishNotifier.value;
-    
     final primaryColor = isDark ? Colors.white : Colors.black;
     final secondaryColor = isDark ? const Color(0xFF888888) : const Color(0xFF666666);
     final borderColor = isDark ? const Color(0xFF222222) : const Color(0xFFE2E2E2);
     final surfaceColor = Theme.of(context).colorScheme.surface;
-    
     final screenHeight = MediaQuery.of(context).size.height;
     final isShortScreen = screenHeight < 750;
 
@@ -354,10 +349,8 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
           return SingleChildScrollView(
             physics: isShortScreen ? const BouncingScrollPhysics() : const NeverScrollableScrollPhysics(),
             child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: constraints.maxHeight, 
-              ),
-              child: IntrinsicHeight( 
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: IntrinsicHeight(
                 child: Column(
                   children: [
                     Padding(
@@ -400,25 +393,25 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                                 ),
                                 Positioned(
                                   left: 0,
-                                  top: 8, 
+                                  top: 8,
                                   child: MagneticButton(
                                     size: 38,
                                     onTap: () => isTurkishNotifier.value = !isTr,
                                     builder: (isHovered, color) => Text(
-                                      isTr ? 'EN' : 'TR', 
+                                      isTr ? 'EN' : 'TR',
                                       style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: color),
                                     ),
                                   ),
                                 ),
                                 Positioned(
                                   right: 0,
-                                  top: 6, 
+                                  top: 6,
                                   child: MagneticButton(
-                                    size: 38, 
+                                    size: 38,
                                     onTap: () => themeNotifier.value = isDark ? ThemeMode.light : ThemeMode.dark,
                                     builder: (isHovered, color) => Icon(
-                                      isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined, 
-                                      size: 16, 
+                                      isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
+                                      size: 16,
                                       color: color,
                                     ),
                                   ),
@@ -462,7 +455,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                                       MagneticButton(
                                         onTap: () => isTurkishNotifier.value = !isTr,
                                         builder: (isHovered, color) => Text(
-                                          isTr ? 'EN' : 'TR', 
+                                          isTr ? 'EN' : 'TR',
                                           style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: color),
                                         ),
                                       ),
@@ -470,8 +463,8 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                                       MagneticButton(
                                         onTap: () => themeNotifier.value = isDark ? ThemeMode.light : ThemeMode.dark,
                                         builder: (isHovered, color) => Icon(
-                                          isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined, 
-                                          size: 20, 
+                                          isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
+                                          size: 20,
                                           color: color,
                                         ),
                                       ),
@@ -485,28 +478,24 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(height: isMobileView ? 50 : 70), 
-                          
+                          SizedBox(height: isMobileView ? 50 : 70),
                           SizedBox(
-                            height: isMobileView ? 400 : 450, 
+                            height: isMobileView ? 400 : 450,
                             width: double.infinity,
                             child: Stack(
                               alignment: Alignment.center,
-                              clipBehavior: Clip.none, 
+                              clipBehavior: Clip.none,
                               children: [
                                 PageView.builder(
                                   controller: _pageController,
                                   onPageChanged: (index) {
-                                    HapticFeedback.selectionClick(); 
                                     _progressController.forward(from: 0.0);
                                   },
                                   itemBuilder: (context, index) {
                                     final projectIndex = index % _projects.length;
                                     final project = _projects[projectIndex];
-                                    
                                     final cardDiff = index - _currentPageValue;
                                     final absDiff = cardDiff.abs();
-
                                     final scale = (1 - (absDiff * (isMobileView ? 0.10 : 0.15))).clamp(0.75, 1.0);
                                     final opacity = (1 - (absDiff * 0.35)).clamp(0.3, 1.0);
 
@@ -516,16 +505,16 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                                         child: Opacity(
                                           opacity: opacity,
                                           child: SizedBox(
-                                            width: isMobileView ? 260 : 280, 
-                                            height: isMobileView ? 370 : 400, 
-                                            child: PremiumProjectCard( 
+                                            width: isMobileView ? 260 : 280,
+                                            height: isMobileView ? 370 : 400,
+                                            child: PremiumProjectCard(
                                               title: project['title']!,
                                               category: isTr ? project['category_tr']! : project['category_en']!,
                                               status: isTr ? project['status_tr']! : project['status_en']!,
                                               isReview: project['isReview'],
                                               isCenter: absDiff < 0.3,
                                               isTr: isTr,
-                                              onTap: () => _showProjectDetails(project), 
+                                              onTap: () => _showProjectDetails(project),
                                             ),
                                           ),
                                         ),
@@ -533,10 +522,9 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                                     );
                                   },
                                 ),
-
                                 Positioned(
                                   top: isMobileView ? -75 : -95,
-                                  child: IgnorePointer( 
+                                  child: IgnorePointer(
                                     child: AnimatedBuilder(
                                       animation: _progressController,
                                       builder: (context, child) {
@@ -574,9 +562,9 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                                           child: Transform.rotate(
                                             angle: rotate,
                                             child: Image.asset(
-                                              image, 
-                                              height: isMobileView ? 120 : 160, 
-                                              alignment: Alignment.bottomCenter, 
+                                              image,
+                                              height: isMobileView ? 120 : 160,
+                                              alignment: Alignment.bottomCenter,
                                               fit: BoxFit.fitHeight,
                                               gaplessPlayback: true,
                                             ),
@@ -586,20 +574,19 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                                     ),
                                   ),
                                 ),
-
                                 Positioned(
-                                  left: isMobileView ? 8 : 60, 
+                                  left: isMobileView ? 8 : 60,
                                   child: NavigationArrowButton(
-                                    icon: Icons.chevron_left, 
+                                    icon: Icons.chevron_left,
                                     size: isMobileView ? 38 : 48,
                                     iconSize: isMobileView ? 20 : 24,
                                     onTap: _goToPreviousPage
                                   )
                                 ),
                                 Positioned(
-                                  right: isMobileView ? 8 : 60, 
+                                  right: isMobileView ? 8 : 60,
                                   child: NavigationArrowButton(
-                                    icon: Icons.chevron_right, 
+                                    icon: Icons.chevron_right,
                                     size: isMobileView ? 38 : 48,
                                     iconSize: isMobileView ? 20 : 24,
                                     onTap: _goToNextPage
@@ -608,8 +595,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                               ],
                             ),
                           ),
-
-                          SizedBox(height: isMobileView ? 30 : 40), 
+                          SizedBox(height: isMobileView ? 30 : 40),
                           Text(
                             '[ 0${activeIndex + 1} / 0${_projects.length} ]',
                             style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, fontFamily: 'Courier', color: secondaryColor, letterSpacing: 4),
@@ -622,7 +608,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                       child: Container(
                         padding: EdgeInsets.all(isMobileView ? 16 : 24),
                         decoration: BoxDecoration(border: Border.all(color: borderColor), color: surfaceColor),
-                        child: isMobileView 
+                        child: isMobileView
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
@@ -640,7 +626,6 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                             ),
                       ),
                     ),
-                    
                   ],
                 ),
               ),
@@ -662,7 +647,8 @@ class ProjectDetailsModal extends StatefulWidget {
 }
 
 class _ProjectDetailsModalState extends State<ProjectDetailsModal> {
-  bool showQR = false; 
+  double _dragYOffset = 0.0;
+  bool showQR = false;
 
   @override
   Widget build(BuildContext context) {
@@ -670,142 +656,180 @@ class _ProjectDetailsModalState extends State<ProjectDetailsModal> {
     final isTr = isTurkishNotifier.value;
     final primaryColor = isDark ? Colors.white : Colors.black;
     final secondaryColor = isDark ? const Color(0xFF888888) : const Color(0xFF666666);
-    
-    return Material(
-      color: Colors.transparent,
-      child: Container(
-        width: widget.isMobile ? MediaQuery.of(context).size.width * 0.9 : 500,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          border: Border.all(color: isDark ? const Color(0xFF333333) : const Color(0xFFDDDDDD)),
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(isDark ? 0.8 : 0.1), blurRadius: 40, offset: const Offset(0, 20))],
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(40, 30, 30, 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    (isTr ? widget.project['category_tr'] : widget.project['category_en']).toString().toUpperCase(),
-                    style: TextStyle(fontSize: 12, letterSpacing: 2, color: secondaryColor, fontWeight: FontWeight.bold),
+
+    return AnimatedContainer(
+      duration: _dragYOffset == 0 ? const Duration(milliseconds: 250) : Duration.zero,
+      curve: Curves.easeOutCubic,
+      transform: Matrix4.translationValues(0, _dragYOffset, 0),
+      child: Material(
+        color: Colors.transparent,
+        child: Container(
+          width: widget.isMobile ? MediaQuery.of(context).size.width * 0.9 : 500,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            border: Border.all(color: isDark ? const Color(0xFF333333) : const Color(0xFFDDDDDD)),
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [BoxShadow(color: Colors.black.withOpacity(isDark ? 0.8 : 0.1), blurRadius: 40, offset: const Offset(0, 20))],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GestureDetector(
+                onVerticalDragUpdate: (details) {
+                  setState(() {
+                    if (details.delta.dy > 0) {
+                      _dragYOffset += details.delta.dy;
+                    }
+                  });
+                },
+                onVerticalDragEnd: (details) {
+                  if (_dragYOffset > 100 || (details.primaryVelocity ?? 0) > 300) {
+                    Navigator.pop(context);
+                  } else {
+                    setState(() => _dragYOffset = 0.0);
+                  }
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Column(
+                    children: [
+                      Center(
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 12),
+                          width: 40,
+                          height: 5,
+                          decoration: BoxDecoration(
+                            color: isDark ? Colors.white24 : Colors.black26,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(40, 20, 30, 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              (isTr ? widget.project['category_tr'] : widget.project['category_en']).toString().toUpperCase(),
+                              style: TextStyle(fontSize: 12, letterSpacing: 2, color: secondaryColor, fontWeight: FontWeight.bold),
+                            ),
+                            ModalCloseButton(onTap: () => Navigator.pop(context)),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  ModalCloseButton(onTap: () => Navigator.pop(context)),
-                ],
+                ),
               ),
-            ),
-            
-            Padding(
-              padding: const EdgeInsets.fromLTRB(40, 0, 40, 40),
-              child: AnimatedCrossFade(
-                duration: const Duration(milliseconds: 300),
-                crossFadeState: showQR ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                firstChild: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.project['title'].toString().replaceAll('\n', ' '), 
-                      style: TextStyle(fontSize: 32, color: primaryColor, fontWeight: FontWeight.w400),
-                    ),
-                    const SizedBox(height: 24),
-                    Text(
-                      isTr ? widget.project['desc_tr'] : widget.project['desc_en'],
-                      style: TextStyle(fontSize: 15, color: isDark ? const Color(0xFFAAAAAA) : const Color(0xFF444444), height: 1.5),
-                    ),
-                    const SizedBox(height: 40),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              if (widget.project['url'].toString().isNotEmpty) {
-                                launchUrl(Uri.parse(widget.project['url']));
-                              }
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              decoration: BoxDecoration(
-                                color: widget.project['isReview'] 
-                                    ? (isDark ? const Color(0xFF222222) : const Color(0xFFEEEEEE)) 
-                                    : primaryColor,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(40, 0, 40, 40),
+                child: AnimatedCrossFade(
+                  duration: const Duration(milliseconds: 300),
+                  crossFadeState: showQR ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                  firstChild: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.project['title'].toString().replaceAll('\n', ' '),
+                        style: TextStyle(fontSize: 32, color: primaryColor, fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(height: 24),
+                      Text(
+                        isTr ? widget.project['desc_tr'] : widget.project['desc_en'],
+                        style: TextStyle(fontSize: 15, color: isDark ? const Color(0xFFAAAAAA) : const Color(0xFF444444), height: 1.5),
+                      ),
+                      const SizedBox(height: 40),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                if (widget.project['url'].toString().isNotEmpty) {
+                                  launchUrl(Uri.parse(widget.project['url']));
+                                }
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                decoration: BoxDecoration(
+                                  color: widget.project['isReview']
+                                      ? (isDark ? const Color(0xFF222222) : const Color(0xFFEEEEEE))
+                                      : primaryColor,
                                   borderRadius: BorderRadius.circular(8),
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                widget.project['isReview'] 
-                                    ? (isTr ? 'ONAY BEKLİYOR' : 'PENDING REVIEW') 
-                                    : (isTr ? widget.project['action_btn_tr'] : widget.project['action_btn_en']),
-                                style: TextStyle(
-                                  fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 1.5,
-                                  color: widget.project['isReview'] ? secondaryColor : Theme.of(context).colorScheme.surface,
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  widget.project['isReview']
+                                      ? (isTr ? 'ONAY BEKLİYOR' : 'PENDING REVIEW')
+                                      : (isTr ? widget.project['action_btn_tr'] : widget.project['action_btn_en']),
+                                  style: TextStyle(
+                                    fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 1.5,
+                                    color: widget.project['isReview'] ? secondaryColor : Theme.of(context).colorScheme.surface,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        if (!widget.project['isReview'] && !widget.isMobile) ...[
-                          const SizedBox(width: 12),
-                          InkWell(
-                            onTap: () => setState(() => showQR = true),
-                            child: Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: isDark ? const Color(0xFF444444) : const Color(0xFFCCCCCC)),
-                                borderRadius: BorderRadius.circular(8),
+                          if (!widget.project['isReview'] && !widget.isMobile) ...[
+                            const SizedBox(width: 12),
+                            InkWell(
+                              onTap: () => setState(() => showQR = true),
+                              child: Container(
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: isDark ? const Color(0xFF444444) : const Color(0xFFCCCCCC)),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Icon(Icons.qr_code_scanner, color: primaryColor, size: 20),
                               ),
-                              child: Icon(Icons.qr_code_scanner, color: primaryColor, size: 20),
                             ),
-                          ),
-                        ]
-                      ],
-                    )
-                  ],
-                ),
-                secondChild: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 160,
-                      height: 160,
-                      decoration: BoxDecoration(
-                        color: Colors.white, 
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: const Color(0xFFEEEEEE)),
-                      ),
-                      child: const Icon(Icons.qr_code_2, color: Colors.black, size: 140), 
-                    ),
-                    const SizedBox(height: 24),
-                    Text(
-                      isTr ? widget.project['qr_msg_tr'] : widget.project['qr_msg_en'],
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 14, color: secondaryColor),
-                    ),
-                    const SizedBox(height: 32),
-                    InkWell(
-                      onTap: () => setState(() => showQR = false),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        width: double.infinity,
+                          ]
+                        ],
+                      )
+                    ],
+                  ),
+                  secondChild: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 160,
+                        height: 160,
                         decoration: BoxDecoration(
-                          border: Border.all(color: isDark ? const Color(0xFF444444) : const Color(0xFFCCCCCC)),
-                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: const Color(0xFFEEEEEE)),
                         ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          isTr ? 'GERİ DÖN' : 'GO BACK',
-                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 1.5, color: primaryColor),
+                        child: const Icon(Icons.qr_code_2, color: Colors.black, size: 140),
+                      ),
+                      const SizedBox(height: 24),
+                      Text(
+                        isTr ? widget.project['qr_msg_tr'] : widget.project['qr_msg_en'],
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 14, color: secondaryColor),
+                      ),
+                      const SizedBox(height: 32),
+                      InkWell(
+                        onTap: () => setState(() => showQR = false),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: isDark ? const Color(0xFF444444) : const Color(0xFFCCCCCC)),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            isTr ? 'GERİ DÖN' : 'GO BACK',
+                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 1.5, color: primaryColor),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -815,7 +839,7 @@ class _ProjectDetailsModalState extends State<ProjectDetailsModal> {
 class MagneticButton extends StatefulWidget {
   final Widget Function(bool isHovered, Color color) builder;
   final VoidCallback onTap;
-  final double size; 
+  final double size;
 
   const MagneticButton({super.key, required this.builder, required this.onTap, this.size = 48});
 
@@ -825,7 +849,7 @@ class MagneticButton extends StatefulWidget {
 
 class _MagneticButtonState extends State<MagneticButton> {
   bool isHovered = false;
-  bool isPressed = false; 
+  bool isPressed = false;
   double offsetX = 0;
   double offsetY = 0;
 
@@ -855,23 +879,22 @@ class _MagneticButtonState extends State<MagneticButton> {
         onPointerUp: (_) => setState(() => isPressed = false),
         child: GestureDetector(
           onTap: () {
-            HapticFeedback.lightImpact(); 
             widget.onTap();
           },
           child: AnimatedScale(
-            scale: isPressed ? 0.90 : 1.0, 
+            scale: isPressed ? 0.90 : 1.0,
             duration: const Duration(milliseconds: 100),
             child: AnimatedContainer(
               duration: isHovered ? const Duration(milliseconds: 50) : const Duration(milliseconds: 300),
               curve: Curves.easeOut,
               transform: Matrix4.translationValues(offsetX, offsetY, 0),
-              width: widget.size, 
+              width: widget.size,
               height: widget.size,
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: isHovered ? defaultColor : Colors.transparent,
                 border: Border.all(color: isHovered ? Colors.transparent : (isDark ? const Color(0xFF444444) : const Color(0xFFCCCCCC))),
-                shape: BoxShape.circle, 
+                shape: BoxShape.circle,
               ),
               child: widget.builder(isHovered, isHovered ? hoverColor : defaultColor),
             ),
@@ -905,14 +928,13 @@ class _PremiumProjectCardState extends State<PremiumProjectCard> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return MouseRegion(
       cursor: widget.isCenter ? SystemMouseCursors.click : SystemMouseCursors.basic,
       onEnter: (_) => setState(() => isHovered = true),
       onExit: (_) => setState(() => isHovered = false),
       child: GestureDetector(
         onTap: widget.isCenter ? () {
-          HapticFeedback.mediumImpact(); 
           widget.onTap();
         } : null,
         child: AnimatedContainer(
@@ -920,19 +942,19 @@ class _PremiumProjectCardState extends State<PremiumProjectCard> {
           curve: Curves.easeOutCubic,
           padding: const EdgeInsets.all(28),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface, 
+            color: Theme.of(context).colorScheme.surface,
             border: Border.all(
               color: widget.isCenter
                   ? (isHovered ? (isDark ? Colors.white : Colors.black) : (isDark ? const Color(0xFF666666) : const Color(0xFFB0B0B0)))
                   : (isDark ? const Color(0xFF222222) : const Color(0xFFE5E5E5)),
               width: widget.isCenter ? 1.5 : 1.0,
             ),
-            borderRadius: BorderRadius.circular(16), 
+            borderRadius: BorderRadius.circular(16),
             boxShadow: [
               if (widget.isCenter)
                 BoxShadow(
-                  color: Colors.black.withOpacity(isDark ? 0.6 : 0.08), 
-                  offset: const Offset(0, 15), 
+                  color: Colors.black.withOpacity(isDark ? 0.6 : 0.08),
+                  offset: const Offset(0, 15),
                   blurRadius: 30,
                 ),
             ],
@@ -943,11 +965,11 @@ class _PremiumProjectCardState extends State<PremiumProjectCard> {
               Text(
                 widget.category.toUpperCase(),
                 style: TextStyle(
-                  fontSize: 11, 
-                  letterSpacing: 2, 
-                  fontWeight: FontWeight.bold, 
-                  color: widget.isCenter 
-                      ? (isDark ? const Color(0xFF888888) : const Color(0xFF666666)) 
+                  fontSize: 11,
+                  letterSpacing: 2,
+                  fontWeight: FontWeight.bold,
+                  color: widget.isCenter
+                      ? (isDark ? const Color(0xFF888888) : const Color(0xFF666666))
                       : (isDark ? const Color(0xFF555555) : const Color(0xFF9E9E9E)),
                 ),
               ),
@@ -957,11 +979,11 @@ class _PremiumProjectCardState extends State<PremiumProjectCard> {
                     widget.title,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 32, 
-                      fontWeight: FontWeight.w300, 
-                      height: 1.15, 
-                      color: widget.isCenter 
-                          ? (isDark ? Colors.white : Colors.black) 
+                      fontSize: 32,
+                      fontWeight: FontWeight.w300,
+                      height: 1.15,
+                      color: widget.isCenter
+                          ? (isDark ? Colors.white : Colors.black)
                           : (isDark ? const Color(0xFF555555) : const Color(0xFF8E8E8E)),
                     ),
                   ),
@@ -972,18 +994,18 @@ class _PremiumProjectCardState extends State<PremiumProjectCard> {
                   AnimatedOpacity(
                     duration: const Duration(milliseconds: 200),
                     opacity: (widget.isCenter && !widget.isReview) ? 1.0 : 0.0,
-                    child: Icon(Icons.add, color: isDark ? Colors.white : Colors.black, size: 20), 
+                    child: Icon(Icons.add, color: isDark ? Colors.white : Colors.black, size: 20),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    widget.isCenter ? (widget.isTr ? 'DETAYLARI GÖR' : 'VIEW DETAILS') : widget.status, 
+                    widget.isCenter ? (widget.isTr ? 'DETAYLARI GÖR' : 'VIEW DETAILS') : widget.status,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 11, 
-                      fontWeight: FontWeight.bold, 
-                      letterSpacing: 1.2, 
-                      color: widget.isCenter 
-                          ? (isDark ? const Color(0xFF888888) : const Color(0xFF666666)) 
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
+                      color: widget.isCenter
+                          ? (isDark ? const Color(0xFF888888) : const Color(0xFF666666))
                           : (isDark ? const Color(0xFF555555) : const Color(0xFF9E9E9E)),
                     ),
                   ),
@@ -1000,8 +1022,8 @@ class _PremiumProjectCardState extends State<PremiumProjectCard> {
 class NavigationArrowButton extends StatefulWidget {
   final IconData icon;
   final VoidCallback onTap;
-  final double size; 
-  final double iconSize; 
+  final double size;
+  final double iconSize;
 
   const NavigationArrowButton({super.key, required this.icon, required this.onTap, this.size = 48, this.iconSize = 24});
 
@@ -1028,11 +1050,10 @@ class _NavigationArrowButtonState extends State<NavigationArrowButton> {
         onPointerUp: (_) => setState(() => isPressed = false),
         child: GestureDetector(
           onTap: () {
-            HapticFeedback.lightImpact(); 
             widget.onTap();
           },
           child: AnimatedScale(
-            scale: isPressed ? 0.90 : 1.0, 
+            scale: isPressed ? 0.90 : 1.0,
             duration: const Duration(milliseconds: 100),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 150),
@@ -1084,7 +1105,6 @@ class _ModalCloseButtonState extends State<ModalCloseButton> {
         onPointerUp: (_) => setState(() => isPressed = false),
         child: GestureDetector(
           onTap: () {
-            HapticFeedback.lightImpact(); 
             widget.onTap();
           },
           child: AnimatedScale(
