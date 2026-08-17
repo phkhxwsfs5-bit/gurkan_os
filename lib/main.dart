@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-// Global Durum Kontrolcüleri
 final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.dark);
 final ValueNotifier<bool> isTurkishNotifier = ValueNotifier(true); 
 
@@ -65,6 +65,7 @@ class GurkanPremiumPortfolio extends StatelessWidget {
     );
   }
 }
+
 class IndieDevBootScreen extends StatefulWidget {
   const IndieDevBootScreen({super.key});
 
@@ -138,6 +139,7 @@ class _IndieDevBootScreenState extends State<IndieDevBootScreen> {
     );
   }
 }
+
 class CarouselPortfolioScreen extends StatefulWidget {
   const CarouselPortfolioScreen({super.key});
 
@@ -316,7 +318,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
     _progressController.stop(); 
     showGeneralDialog(
       context: context,
-      barrierDismissible: true, 
+      barrierDismissible: true,
       barrierLabel: 'Dismiss',
       barrierColor: Colors.black.withOpacity(0.5), 
       transitionDuration: const Duration(milliseconds: 300),
@@ -495,6 +497,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                                 PageView.builder(
                                   controller: _pageController,
                                   onPageChanged: (index) {
+                                    HapticFeedback.selectionClick(); 
                                     _progressController.forward(from: 0.0);
                                   },
                                   itemBuilder: (context, index) {
@@ -852,6 +855,7 @@ class _MagneticButtonState extends State<MagneticButton> {
         onPointerUp: (_) => setState(() => isPressed = false),
         child: GestureDetector(
           onTap: () {
+            HapticFeedback.lightImpact(); 
             widget.onTap();
           },
           child: AnimatedScale(
@@ -908,6 +912,7 @@ class _PremiumProjectCardState extends State<PremiumProjectCard> {
       onExit: (_) => setState(() => isHovered = false),
       child: GestureDetector(
         onTap: widget.isCenter ? () {
+          HapticFeedback.mediumImpact(); 
           widget.onTap();
         } : null,
         child: AnimatedContainer(
@@ -1023,6 +1028,7 @@ class _NavigationArrowButtonState extends State<NavigationArrowButton> {
         onPointerUp: (_) => setState(() => isPressed = false),
         child: GestureDetector(
           onTap: () {
+            HapticFeedback.lightImpact(); 
             widget.onTap();
           },
           child: AnimatedScale(
@@ -1078,6 +1084,7 @@ class _ModalCloseButtonState extends State<ModalCloseButton> {
         onPointerUp: (_) => setState(() => isPressed = false),
         child: GestureDetector(
           onTap: () {
+            HapticFeedback.lightImpact(); 
             widget.onTap();
           },
           child: AnimatedScale(
