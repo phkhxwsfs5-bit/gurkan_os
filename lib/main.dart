@@ -35,6 +35,7 @@ class GurkanPremiumPortfolio extends StatelessWidget {
               title: 'Gürkan Cihaner',
               debugShowCheckedModeBanner: false,
               scrollBehavior: MouseDragScrollBehavior(),
+              builder: (context, child) => SelectionArea(child: child!),
               themeMode: currentMode,
               theme: ThemeData(
                 brightness: Brightness.light,
