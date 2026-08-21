@@ -147,11 +147,11 @@ class CarouselPortfolioScreen extends StatefulWidget {
 
 class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with SingleTickerProviderStateMixin {
   late Timer _clockTimer;
-  String _currentDateTime = '';
+  final ValueNotifier<String> _currentDateTimeNotifier = ValueNotifier('');
 
   late PageController _pageController;
   bool _isMobile = false;
-  double _currentPageValue = 1000.0;
+  final ValueNotifier<double> _currentPageNotifier = ValueNotifier(1000.0);
   late AnimationController _progressController;
 
   final List<Map<String, dynamic>> _projects = [
@@ -240,7 +240,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
     _clockTimer = Timer.periodic(const Duration(seconds: 1), (timer) => _updateTime());
 
     _pageController.addListener(() {
-      setState(() => _currentPageValue = _pageController.page ?? 1000.0);
+      _currentPageNotifier.value = _pageController.page ?? 1000.0;
     });
 
     _progressController = AnimationController(vsync: this, duration: const Duration(seconds: 10));
@@ -264,9 +264,9 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
     if (_isMobile != isMob) {
       _isMobile = isMob;
       _pageController.dispose();
-      _pageController = PageController(viewportFraction: _isMobile ? 0.85 : 0.28, initialPage: _currentPageValue.round());
+      _pageController = PageController(viewportFraction: _isMobile ? 0.85 : 0.28, initialPage: _currentPageNotifier.value.round());
       _pageController.addListener(() {
-        setState(() => _currentPageValue = _pageController.page ?? 1000.0);
+        _currentPageNotifier.value = _pageController.page ?? 1000.0;
       });
     }
   }
@@ -286,7 +286,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
     final dateStr = _formatDate(now);
     final timeStr = '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}';
     if (mounted) {
-      setState(() => _currentDateTime = '$dateStr • $timeStr');
+      _currentDateTimeNotifier.value = '$dateStr • $timeStr';
     }
   }
 
@@ -314,8 +314,10 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
 
   void _showProjectDetails(Map<String, dynamic> project) {
     _progressController.stop();
+    final slug = project['title'].toString().replaceAll('\n', '-').toLowerCase();
     showGeneralDialog(
       context: context,
+      routeSettings: RouteSettings(name: '/project/$slug'),
       barrierDismissible: true,
       barrierLabel: 'Dismiss',
       barrierColor: Colors.black.withOpacity(0.5),
@@ -333,7 +335,6 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
   @override
   Widget build(BuildContext context) {
     final isMobileView = MediaQuery.of(context).size.width < 900;
-    final activeIndex = (_currentPageValue.round()) % _projects.length;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final isTr = isTurkishNotifier.value;
     final primaryColor = isDark ? Colors.white : Colors.black;
@@ -494,31 +495,37 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                                   itemBuilder: (context, index) {
                                     final projectIndex = index % _projects.length;
                                     final project = _projects[projectIndex];
-                                    final cardDiff = index - _currentPageValue;
-                                    final absDiff = cardDiff.abs();
-                                    final scale = (1 - (absDiff * (isMobileView ? 0.10 : 0.15))).clamp(0.75, 1.0);
-                                    final opacity = (1 - (absDiff * 0.35)).clamp(0.3, 1.0);
+                                    
+                                    return ValueListenableBuilder<double>(
+                                      valueListenable: _currentPageNotifier,
+                                      builder: (context, currentPageValue, child) {
+                                        final cardDiff = index - currentPageValue;
+                                        final absDiff = cardDiff.abs();
+                                        final scale = (1 - (absDiff * (isMobileView ? 0.10 : 0.15))).clamp(0.75, 1.0);
+                                        final opacity = (1 - (absDiff * 0.35)).clamp(0.3, 1.0);
 
-                                    return Center(
-                                      child: Transform.scale(
-                                        scale: scale,
-                                        child: Opacity(
-                                          opacity: opacity,
-                                          child: SizedBox(
-                                            width: isMobileView ? 260 : 280,
-                                            height: isMobileView ? 370 : 400,
-                                            child: PremiumProjectCard(
-                                              title: project['title']!,
-                                              category: isTr ? project['category_tr']! : project['category_en']!,
-                                              status: isTr ? project['status_tr']! : project['status_en']!,
-                                              isReview: project['isReview'],
-                                              isCenter: absDiff < 0.3,
-                                              isTr: isTr,
-                                              onTap: () => _showProjectDetails(project),
+                                        return Center(
+                                          child: Transform.scale(
+                                            scale: scale,
+                                            child: Opacity(
+                                              opacity: opacity,
+                                              child: SizedBox(
+                                                width: isMobileView ? 260 : 280,
+                                                height: isMobileView ? 370 : 400,
+                                                child: PremiumProjectCard(
+                                                  title: project['title']!,
+                                                  category: isTr ? project['category_tr']! : project['category_en']!,
+                                                  status: isTr ? project['status_tr']! : project['status_en']!,
+                                                  isReview: project['isReview'],
+                                                  isCenter: absDiff < 0.3,
+                                                  isTr: isTr,
+                                                  onTap: () => _showProjectDetails(project),
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
+                                        );
+                                      },
                                     );
                                   },
                                 ),
@@ -596,9 +603,15 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                             ),
                           ),
                           SizedBox(height: isMobileView ? 30 : 40),
-                          Text(
-                            '[ 0${activeIndex + 1} / 0${_projects.length} ]',
-                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, fontFamily: 'Courier', color: secondaryColor, letterSpacing: 4),
+                          ValueListenableBuilder<double>(
+                            valueListenable: _currentPageNotifier,
+                            builder: (context, currentPageValue, child) {
+                              final activeIndex = (currentPageValue.round()) % _projects.length;
+                              return Text(
+                                '[ 0${activeIndex + 1} / 0${_projects.length} ]',
+                                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, fontFamily: 'Courier', color: secondaryColor, letterSpacing: 4),
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -614,14 +627,24 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                               children: [
                                 Text(isTr ? 'DURUM: ÇEVRİMİÇİ\nKONUM: ANKARA, TR' : 'STATUS: ONLINE\nLOCATION: ANKARA, TR', textAlign: TextAlign.center, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 2, color: secondaryColor, height: 1.6)),
                                 const SizedBox(height: 16),
-                                Text(_currentDateTime, textAlign: TextAlign.center, style: TextStyle(fontFamily: 'Courier', fontSize: 14, color: primaryColor, fontWeight: FontWeight.bold, letterSpacing: 1.0)),
+                                ValueListenableBuilder<String>(
+                                  valueListenable: _currentDateTimeNotifier,
+                                  builder: (context, currentDateTime, child) {
+                                    return Text(currentDateTime, textAlign: TextAlign.center, style: TextStyle(fontFamily: 'Courier', fontSize: 14, color: primaryColor, fontWeight: FontWeight.bold, letterSpacing: 1.0));
+                                  },
+                                ),
                               ],
                             )
                           : Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Expanded(child: Text(isTr ? 'DURUM: ÇEVRİMİÇİ\nKONUM: ANKARA, TR' : 'STATUS: ONLINE\nLOCATION: ANKARA, TR', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 2, color: secondaryColor, height: 1.6))),
-                                Text(_currentDateTime, textAlign: TextAlign.right, style: TextStyle(fontFamily: 'Courier', fontSize: 14, color: primaryColor, fontWeight: FontWeight.bold, letterSpacing: 1.5)),
+                                ValueListenableBuilder<String>(
+                                  valueListenable: _currentDateTimeNotifier,
+                                  builder: (context, currentDateTime, child) {
+                                    return Text(currentDateTime, textAlign: TextAlign.right, style: TextStyle(fontFamily: 'Courier', fontSize: 14, color: primaryColor, fontWeight: FontWeight.bold, letterSpacing: 1.5));
+                                  },
+                                ),
                               ],
                             ),
                       ),
