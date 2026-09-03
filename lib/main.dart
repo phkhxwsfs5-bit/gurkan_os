@@ -335,17 +335,19 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
 
   @override
   Widget build(BuildContext context) {
-    final isMobileView = MediaQuery.of(context).size.width < 900;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final isTr = isTurkishNotifier.value;
-    final primaryColor = isDark ? Colors.white : Colors.black;
-    final secondaryColor = isDark ? const Color(0xFF888888) : const Color(0xFF666666);
-    final borderColor = isDark ? const Color(0xFF222222) : const Color(0xFFE2E2E2);
-    final surfaceColor = Theme.of(context).colorScheme.surface;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final isShortScreen = screenHeight < 750;
+    return ValueListenableBuilder<bool>(
+      valueListenable: isTurkishNotifier,
+      builder: (context, isTr, _) {
+        final isMobileView = MediaQuery.of(context).size.width < 900;
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        final primaryColor = isDark ? Colors.white : Colors.black;
+        final secondaryColor = isDark ? const Color(0xFF888888) : const Color(0xFF666666);
+        final borderColor = isDark ? const Color(0xFF222222) : const Color(0xFFE2E2E2);
+        final surfaceColor = Theme.of(context).colorScheme.surface;
+        final screenHeight = MediaQuery.of(context).size.height;
+        final isShortScreen = screenHeight < 750;
 
-    return Scaffold(
+        return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
@@ -658,6 +660,8 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
         },
       ),
     );
+      },
+    );
   }
 }
 
@@ -676,12 +680,14 @@ class _ProjectDetailsModalState extends State<ProjectDetailsModal> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final isTr = isTurkishNotifier.value;
-    final primaryColor = isDark ? Colors.white : Colors.black;
-    final secondaryColor = isDark ? const Color(0xFF888888) : const Color(0xFF666666);
+    return ValueListenableBuilder<bool>(
+      valueListenable: isTurkishNotifier,
+      builder: (context, isTr, _) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        final primaryColor = isDark ? Colors.white : Colors.black;
+        final secondaryColor = isDark ? const Color(0xFF888888) : const Color(0xFF666666);
 
-    return AnimatedContainer(
+        return AnimatedContainer(
       duration: _dragYOffset == 0 ? const Duration(milliseconds: 250) : Duration.zero,
       curve: Curves.easeOutCubic,
       transform: Matrix4.translationValues(0, _dragYOffset, 0),
@@ -856,6 +862,8 @@ class _ProjectDetailsModalState extends State<ProjectDetailsModal> {
           ),
         ),
       ),
+    );
+      },
     );
   }
 }
