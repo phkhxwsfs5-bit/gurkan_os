@@ -164,7 +164,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
       'status_tr': 'Şimdi Oyna',
       'url': 'https://grcihaner.com/bunker06/',
       'desc_en': 'A web-based version of the Bunker 06 mobile game. Survive and explore.',
-      'desc_tr': 'Bunker 06 mobil oyununun web tarayıcısı üzerinden oynanabilen versiyonu. Hayatta kal ve keşfet.',
+      'desc_tr': 'Bunker 06 mobil oyununun web tarayıcısı üzerinden oynanabilen versiyonu. Hayatta kal ve keşfet...',
       'isReview': false,
       'action_btn_en': 'PLAY GAME',
       'action_btn_tr': 'OYUNU OYNA',
