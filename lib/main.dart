@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -152,7 +152,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
 
   late PageController _pageController;
   bool _isMobile = false;
-  final ValueNotifier<double> _currentPageNotifier = ValueNotifier(1000.0);
+  final ValueNotifier<double> _currentPageNotifier = ValueNotifier(1200.0);
   late AnimationController _progressController;
 
   final List<Map<String, dynamic>> _projects = [
@@ -251,12 +251,12 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(viewportFraction: 0.28, initialPage: 1000);
+    _pageController = PageController(viewportFraction: 0.28, initialPage: 1200);
     _updateTime();
     _clockTimer = Timer.periodic(const Duration(seconds: 1), (timer) => _updateTime());
 
     _pageController.addListener(() {
-      _currentPageNotifier.value = _pageController.page ?? 1000.0;
+      _currentPageNotifier.value = _pageController.page ?? 1200.0;
     });
 
     _progressController = AnimationController(vsync: this, duration: const Duration(seconds: 10));
@@ -282,7 +282,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
       _pageController.dispose();
       _pageController = PageController(viewportFraction: _isMobile ? 0.85 : 0.28, initialPage: _currentPageNotifier.value.round());
       _pageController.addListener(() {
-        _currentPageNotifier.value = _pageController.page ?? 1000.0;
+        _currentPageNotifier.value = _pageController.page ?? 1200.0;
       });
     }
   }
