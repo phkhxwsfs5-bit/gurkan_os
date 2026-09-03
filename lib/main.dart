@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -32,7 +32,7 @@ class GurkanPremiumPortfolio extends StatelessWidget {
           valueListenable: isTurkishNotifier,
           builder: (_, bool isTr, __) {
             return MaterialApp(
-              title: 'Gürkan Cihaner',
+              title: 'GÃ¼rkan Cihaner',
               debugShowCheckedModeBanner: false,
               scrollBehavior: MouseDragScrollBehavior(),
               builder: (context, child) => SelectionArea(child: child!),
@@ -78,7 +78,7 @@ class _IndieDevBootScreenState extends State<IndieDevBootScreen> {
   int _currentStep = 0;
 
   final List<String> _bootStepsEn = ['Loading assets...', 'Preparing environment...', 'Ready.'];
-  final List<String> _bootStepsTr = ['Veriler yükleniyor...', 'Ortam hazırlanıyor...', 'Hazır.'];
+  final List<String> _bootStepsTr = ['Veriler yÃ¼kleniyor...', 'Ortam hazÄ±rlanÄ±yor...', 'HazÄ±r.'];
 
   @override
   void initState() {
@@ -157,79 +157,94 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
 
   final List<Map<String, dynamic>> _projects = [
     {
+      'title': 'Bunker\n06',
+      'category_en': 'Web Game',
+      'category_tr': 'WEB OYUN',
+      'status_en': 'Play Now',
+      'status_tr': 'Şimdi Oyna',
+      'url': 'https://grcihaner.com/bunker06/',
+      'desc_en': 'A web-based version of the Bunker 06 mobile game.',
+      'desc_tr': 'Bunker 06 mobil oyununun web tarayıcısı üzerinden oynanabilen versiyonu.',
+      'isReview': false,
+      'action_btn_en': 'PLAY GAME',
+      'action_btn_tr': 'OYUNU OYNA',
+      'qr_msg_en': 'Scan to play on mobile.',
+      'qr_msg_tr': 'Mobilde oynamak için tara.',
+    },
+    {
       'title': 'Vertical\nEscape',
       'category_en': 'Mobile Game',
-      'category_tr': 'MOBİL OYUN',
+      'category_tr': 'MOBÄ°L OYUN',
       'status_en': 'Live on Google Play',
-      'status_tr': 'Google Play\'de Yayında',
+      'status_tr': 'Google Play\'de YayÄ±nda',
       'url': 'https://play.google.com/store/apps/details?id=com.gurkanc.verticalescape&hl=tr',
       'desc_en': 'A fast-paced, reflex-based vertical 2D mobile platformer where you overcome challenging obstacles.',
-      'desc_tr': 'Zorlu engelleri aştığın, refleks tabanlı ve yüksek tempolu dikey 2D mobil platform oyunu.',
+      'desc_tr': 'Zorlu engelleri aÅŸtÄ±ÄŸÄ±n, refleks tabanlÄ± ve yÃ¼ksek tempolu dikey 2D mobil platform oyunu.',
       'isReview': false,
       'action_btn_en': 'VIEW IN STORE',
-      'action_btn_tr': 'MAĞAZADA GÖR',
+      'action_btn_tr': 'MAÄAZADA GÃ–R',
       'qr_msg_en': 'Scan with mobile to download.',
-      'qr_msg_tr': 'İndirmek için telefonunla tara.',
+      'qr_msg_tr': 'Ä°ndirmek iÃ§in telefonunla tara.',
     },
     {
       'title': 'Mood\nMixer',
       'category_en': 'Mobile App',
-      'category_tr': 'MOBİL UYGULAMA',
+      'category_tr': 'MOBÄ°L UYGULAMA',
       'status_en': 'Live on Google Play',
-      'status_tr': 'Google Play\'de Yayında',
+      'status_tr': 'Google Play\'de YayÄ±nda',
       'url': 'https://play.google.com/store/apps/details?id=com.gurkanc.moodmixer',
       'desc_en': 'A smart mobile assistant providing dynamic content and suggestions based on users\' current moods.',
-      'desc_tr': 'Kullanıcıların o anki ruh hallerine göre dinamik içerikler ve öneriler sunan akıllı mobil asistan.',
+      'desc_tr': 'KullanÄ±cÄ±larÄ±n o anki ruh hallerine gÃ¶re dinamik iÃ§erikler ve Ã¶neriler sunan akÄ±llÄ± mobil asistan.',
       'isReview': false,
       'action_btn_en': 'VIEW IN STORE',
-      'action_btn_tr': 'MAĞAZADA GÖR',
+      'action_btn_tr': 'MAÄAZADA GÃ–R',
       'qr_msg_en': 'Scan with mobile to download.',
-      'qr_msg_tr': 'İndirmek için telefonunla tara.',
+      'qr_msg_tr': 'Ä°ndirmek iÃ§in telefonunla tara.',
     },
     {
       'title': 'Shaman\nSurvivor',
       'category_en': 'Mobile Game',
-      'category_tr': 'MOBİL OYUN',
+      'category_tr': 'MOBÄ°L OYUN',
       'status_en': 'In Review',
-      'status_tr': 'İncelemede',
+      'status_tr': 'Ä°ncelemede',
       'url': '',
       'desc_en': 'An action game featuring rogue-lite elements, built around mystic runes and survival mechanics.',
-      'desc_tr': 'Mistik rünler ve hayatta kalma mekanikleri üzerine kurulu, rogue-lite ögeleri barındıran aksiyon oyunu.',
+      'desc_tr': 'Mistik rÃ¼nler ve hayatta kalma mekanikleri Ã¼zerine kurulu, rogue-lite Ã¶geleri barÄ±ndÄ±ran aksiyon oyunu.',
       'isReview': true,
       'action_btn_en': 'VIEW IN STORE',
-      'action_btn_tr': 'MAĞAZADA GÖR',
+      'action_btn_tr': 'MAÄAZADA GÃ–R',
       'qr_msg_en': 'Scan with mobile to download.',
-      'qr_msg_tr': 'İndirmek için telefonunla tara.',
+      'qr_msg_tr': 'Ä°ndirmek iÃ§in telefonunla tara.',
     },
     {
-      'title': 'Gündem\nRadarı',
+      'title': 'GÃ¼ndem\nRadarÄ±',
       'category_en': 'Automated Bot',
       'category_tr': 'OTONOM BOT',
       'status_en': 'Live on X',
-      'status_tr': 'X\'te Yayında',
+      'status_tr': 'X\'te YayÄ±nda',
       'url': 'https://x.com/GundemRadariBot',
       'desc_en': 'An automated system that scans, analyzes real-time agenda data, and posts autonomously on X (Twitter).',
-      'desc_tr': 'Gündemdeki verileri anlık olarak tarayan, analiz eden ve X (Twitter) üzerinde otonom paylaşımlar yapan sistem.',
+      'desc_tr': 'GÃ¼ndemdeki verileri anlÄ±k olarak tarayan, analiz eden ve X (Twitter) Ã¼zerinde otonom paylaÅŸÄ±mlar yapan sistem.',
       'isReview': false,
       'action_btn_en': 'VIEW ON X',
-      'action_btn_tr': 'X\'TE GÖR',
+      'action_btn_tr': 'X\'TE GÃ–R',
       'qr_msg_en': 'Scan to view profile on X.',
-      'qr_msg_tr': 'X profiline gitmek için tara.',
+      'qr_msg_tr': 'X profiline gitmek iÃ§in tara.',
     },
     {
       'title': 'Dialed',
       'category_en': 'Mobile App',
-      'category_tr': 'MOBİL UYGULAMA',
+      'category_tr': 'MOBÄ°L UYGULAMA',
       'status_en': 'In Review',
-      'status_tr': 'İncelemede',
+      'status_tr': 'Ä°ncelemede',
       'url': '',
       'desc_en': 'A comprehensive companion app for home baristas, designed to meticulously track dial-in recipes, extraction logs, grinder settings, and bean stash to consistently achieve the perfect cup.',
-      'desc_tr': 'Ev baristaları için tasarlanmış kapsamlı bir yardımcı uygulama. Mükemmel fincanı yakalamak için dial-in reçetelerini, ekstraksiyon günlüklerini, öğütücü ayarlarını ve çekirdek stoğunu detaylıca takip etmenizi sağlar.',
+      'desc_tr': 'Ev baristalarÄ± iÃ§in tasarlanmÄ±ÅŸ kapsamlÄ± bir yardÄ±mcÄ± uygulama. MÃ¼kemmel fincanÄ± yakalamak iÃ§in dial-in reÃ§etelerini, ekstraksiyon gÃ¼nlÃ¼klerini, Ã¶ÄŸÃ¼tÃ¼cÃ¼ ayarlarÄ±nÄ± ve Ã§ekirdek stoÄŸunu detaylÄ±ca takip etmenizi saÄŸlar.',
       'isReview': true,
       'action_btn_en': 'VIEW IN STORE',
-      'action_btn_tr': 'MAĞAZADA GÖR',
+      'action_btn_tr': 'MAÄAZADA GÃ–R',
       'qr_msg_en': 'Scan with mobile to download.',
-      'qr_msg_tr': 'İndirmek için telefonunla tara.',
+      'qr_msg_tr': 'Ä°ndirmek iÃ§in telefonunla tara.',
     },
   ];
 
@@ -275,7 +290,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
   String _formatDate(DateTime date) {
     final isTr = isTurkishNotifier.value;
     final monthsEn = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    final monthsTr = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'];
+    final monthsTr = ['Oca', 'Åub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'AÄŸu', 'Eyl', 'Eki', 'Kas', 'Ara'];
     String day = date.day.toString().padLeft(2, '0');
     String month = isTr ? monthsTr[date.month - 1] : monthsEn[date.month - 1];
     String year = date.year.toString();
@@ -287,7 +302,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
     final dateStr = _formatDate(now);
     final timeStr = '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}';
     if (mounted) {
-      _currentDateTimeNotifier.value = '$dateStr • $timeStr';
+      _currentDateTimeNotifier.value = '$dateStr â€¢ $timeStr';
     }
   }
 
@@ -371,7 +386,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                                       FittedBox(
                                         fit: BoxFit.scaleDown,
                                         child: Text(
-                                          'Gürkan Cihaner',
+                                          'GÃ¼rkan Cihaner',
                                           style: TextStyle(fontSize: 36, fontWeight: FontWeight.w400, letterSpacing: -1.5, color: primaryColor),
                                         ),
                                       ),
@@ -430,7 +445,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                                   child: Column(
                                     children: [
                                       Text(
-                                        'Gürkan Cihaner',
+                                        'GÃ¼rkan Cihaner',
                                         style: TextStyle(fontSize: 52, fontWeight: FontWeight.w400, letterSpacing: -1.5, color: primaryColor),
                                       ),
                                       const SizedBox(height: 20),
@@ -628,7 +643,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text(isTr ? 'DURUM: ÇEVRİMİÇİ\nKONUM: ANKARA, TR' : 'STATUS: ONLINE\nLOCATION: ANKARA, TR', textAlign: TextAlign.center, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 2, color: secondaryColor, height: 1.6)),
+                                Text(isTr ? 'DURUM: Ã‡EVRÄ°MÄ°Ã‡Ä°\nKONUM: ANKARA, TR' : 'STATUS: ONLINE\nLOCATION: ANKARA, TR', textAlign: TextAlign.center, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 2, color: secondaryColor, height: 1.6)),
                                 const SizedBox(height: 16),
                                 ValueListenableBuilder<String>(
                                   valueListenable: _currentDateTimeNotifier,
@@ -641,7 +656,7 @@ class _CarouselPortfolioScreenState extends State<CarouselPortfolioScreen> with 
                           : Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Expanded(child: Text(isTr ? 'DURUM: ÇEVRİMİÇİ\nKONUM: ANKARA, TR' : 'STATUS: ONLINE\nLOCATION: ANKARA, TR', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 2, color: secondaryColor, height: 1.6))),
+                                Expanded(child: Text(isTr ? 'DURUM: Ã‡EVRÄ°MÄ°Ã‡Ä°\nKONUM: ANKARA, TR' : 'STATUS: ONLINE\nLOCATION: ANKARA, TR', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 2, color: secondaryColor, height: 1.6))),
                                 ValueListenableBuilder<String>(
                                   valueListenable: _currentDateTimeNotifier,
                                   builder: (context, currentDateTime, child) {
@@ -790,7 +805,7 @@ class _ProjectDetailsModalState extends State<ProjectDetailsModal> {
                                 alignment: Alignment.center,
                                 child: Text(
                                   widget.project['isReview']
-                                      ? (isTr ? 'ONAY BEKLİYOR' : 'PENDING REVIEW')
+                                      ? (isTr ? 'ONAY BEKLÄ°YOR' : 'PENDING REVIEW')
                                       : (isTr ? widget.project['action_btn_tr'] : widget.project['action_btn_en']),
                                   style: TextStyle(
                                     fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 1.5,
@@ -849,7 +864,7 @@ class _ProjectDetailsModalState extends State<ProjectDetailsModal> {
                           ),
                           alignment: Alignment.center,
                           child: Text(
-                            isTr ? 'GERİ DÖN' : 'GO BACK',
+                            isTr ? 'GERÄ° DÃ–N' : 'GO BACK',
                             style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 1.5, color: primaryColor),
                           ),
                         ),
@@ -1030,7 +1045,7 @@ class _PremiumProjectCardState extends State<PremiumProjectCard> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    widget.isCenter ? (widget.isTr ? 'DETAYLARI GÖR' : 'VIEW DETAILS') : widget.status,
+                    widget.isCenter ? (widget.isTr ? 'DETAYLARI GÃ–R' : 'VIEW DETAILS') : widget.status,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 11,
