@@ -874,6 +874,7 @@ class _ProjectDetailsModalState extends State<ProjectDetailsModal> {
                 ),
               ),
             ],
+          ),
         ),
       ),
     );
